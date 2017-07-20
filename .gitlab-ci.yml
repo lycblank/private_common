@@ -1,0 +1,34 @@
+variables:
+  REPO_NAME: sunlive-spider
+
+before_script:
+  - echo $CI_BUILD_REF
+  - echo $CI_PROJECT_DIR
+  - echo $GOPATH
+  - echo $PATH
+
+stages:
+  - build
+  - deploy
+
+build-project:
+  stage: build
+  only:
+    - develop
+    - master
+  script:
+    - rm -rf $GOPATH/src/$REPO_NAME
+    - mkdir -p $GOPATH/src/$REPO_NAME
+    - mv $CI_PROJECT_DIR/* $GOPATH/src/$REPO_NAME/
+    - cd $GOPATH/src/$REPO_NAME
+    - godep go build -o spider
+                                                                          
+deploy-project:
+  stage: deploy
+  only:
+    - develop
+    - master
+
+  script:
+    - cd $GOPATH/src/$REPO_NAME
+    - dev_deploy spider
