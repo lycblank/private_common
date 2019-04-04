@@ -180,7 +180,7 @@ func fillValue(val reflect.Value, requestVal string, required bool, jsonTag stri
 			SystemError(500, "value can not set")
 		}
 		val.SetUint(v)
-	case kind == reflect.Int:
+	case kind == reflect.Int || kind == reflect.Int8 || kind == reflect.Int16 || kind == reflect.Int32 || kind == reflect.Int64:
 		if requestVal == "" && !required {
 			requestVal = "0"
 		}
