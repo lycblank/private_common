@@ -192,6 +192,18 @@ func fillValue(val reflect.Value, requestVal string, required bool, jsonTag stri
 			SystemError(500, "value can not set")
 		}
 		val.SetInt(v)
+	case kind == reflect.Float64 || kind == reflect.Float32:
+		if requestVal == "" && !required {
+			requestVal = "0"
+		}
+		v, err := strconv.ParseFloat(requestVal, 64)
+		if err != nil {
+			BadParamer(400, fmt.Sprintf("%s is not uint", jsonTag))
+		}
+		if !val.IsValid() || !val.CanSet() {
+			SystemError(500, "value can not set")
+		}
+		val.SetFloat(v)
 	case kind == reflect.String:
 		val.SetString(requestVal)
 	default:
